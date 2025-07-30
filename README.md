@@ -1,61 +1,45 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## About Blog Post 
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Blog Post is made using Laravel framework 12. Project Specification:
 
-## About Laravel
+- [Admin Panel](https://filamentphp.com/docs).
+- [Roles and Permission](https://filamentphp.com/plugins/bezhansalleh-shield).
+- SoftDeletes for the Post.
+- MarkdownEditor for the Post content.
+- Blog post created by any user should be approved by Super Admin.
+- Mail is sent to user if the Post is Approved.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is a simple blog application with minimum requirements.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation Steps
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Follow this instructions to install the project on your machine:
 
-## Learning Laravel
+1. Clone this repo. ```bash
+     git clone https://github.com/AyushMahatara/BlogPost.git
+    ```
+2. `cd BlogPost`
+3. `composer install`
+4. `copy and paste .env.example`
+5. `rename the copied file '.env copy.example' to '.env'`
+6. `php artisan key:generate`
+7. Set **database config** on `.env` file `optional`
+8. `php artisan migrate --seed`
+9. `php artisan serve`
+10. Click on the link to open the `Application` 
+#### Note: While running migration it asks for db to create as we are using sqlite just type 'yes'. There is only one Seeder file as this is a small project.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+11. `php artisan shiled:generate --all`
+12. `php artisan shield:super-admin`
+13. Choose which email would like to make admin 
+#### Note: Use ID example for `admin@example.com` type 1.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+14. Access the Dashboard by typing `/admin` in the url example `http://127.0.0.1:8000/admin`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Credential 
 
-## Laravel Sponsors
+- Email: `admin@example.com` Password: `password123`
+- Email: `user@example.com` Password: `password123`
+- Email: `guest@example.com` Password: `password123`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Note: After logging in with Super Admin email, don't forget to give Permission to the Roles.
