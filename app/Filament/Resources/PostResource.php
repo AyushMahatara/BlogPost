@@ -56,7 +56,7 @@ class PostResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')->sortable()->searchable()->wrap(),
-                Tables\Columns\TextColumn::make('content')->limit(15),
+                Tables\Columns\TextColumn::make('content')->limit(50)->markdown(),
                 Tables\Columns\TextColumn::make('category.name')->label('Category'),
                 Tables\Columns\TextColumn::make('tags.name')->badge()->wrap(),
                 Tables\Columns\IconColumn::make('is_approved')
