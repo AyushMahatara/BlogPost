@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Models\Post;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Post;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Mail\PostApproved;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Mail;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PostResource\RelationManagers;
 
 class PostResource extends Resource
 {
@@ -41,17 +44,14 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('title')->sortable()->searchable()->wrap(),
+                Tables\Columns\TextColumn::make('content')->limit(15),
                 Tables\Columns\TextColumn::make('category.name')->label('Category'),
-                Tables\Columns\TextColumn::make('tags.name')->badge(),
+                Tables\Columns\TextColumn::make('tags.name')->badge()->wrap(),
                 Tables\Columns\IconColumn::make('is_approved')
-                    ->icon(fn(string $state): string => $state === '1' ? 'heroicon-s-check-circle' : 'heroicon-s-x-circle')
-                    ->label('Approved')
-                    ->color(fn(string $state): string => match ($state) {
-                        '0' => 'warning',
-                        '1' => 'success',
-                        default => 'gray',
-                    })
+                    ->icon(fn($state) => $state ? 'heroicon-s-check-circle' : 'heroicon-s-x-circle')
+                    ->color(fn($state) => $state ? 'success' : 'warning'),
+                Tables\Columns\TextColumn::make('user.name')->label('Author'),
 
             ])
             ->filters([
@@ -61,9 +61,32 @@ class PostResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('approve')
                     ->label('Approve')
+                    ->icon('heroicon-s-check-circle')
                     ->action(function (Post $record) {
+                        // Check if the post is already approved
+                        if ($record->is_approved) {
+                            // If the post is already approved, show a notification and stop the email from being sent
+                            Notification::make()
+                                ->title('This post is already approved.')
+                                ->warning()
+                                ->send();
+
+                            return; // Prevent further actions, including sending the email
+                        }
+
+                        // Update the post's approval status
                         $record->update(['is_approved' => true]);
+
+                        // Send an email to the user informing them that the post is approved
+                        Mail::to($record->user->email)->send(new PostApproved($record));
+
+                        // Show success notification
+                        Notification::make()
+                            ->title('Post approved and email sent!')
+                            ->success()
+                            ->send();
                     })
+                    ->color('success')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
