@@ -12,9 +12,11 @@ use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Mail;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Filters\TrashedFilter;
 use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PostResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class PostResource extends Resource
 {
@@ -45,7 +47,7 @@ class PostResource extends Resource
                     ->multiple()
                     ->searchable()
                     ->preload(),
-                Forms\Components\Toggle::make('is_approved')->label('Approved')->columnSpanFull(),
+                Forms\Components\Toggle::make('is_approved')->label('Approved')->columnSpanFull()->visible(fn($record) => auth()->user()->hasRole('super_admin')),
             ]);
     }
 
@@ -64,38 +66,45 @@ class PostResource extends Resource
 
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('approve')
-                    ->label('Approve')
-                    ->icon('heroicon-s-check-circle')
-                    ->action(function (Post $record) {
-                        // Check if the post is already approved
-                        if ($record->is_approved) {
-                            // If the post is already approved, show a notification and stop the email from being sent
+                ActionGroup::make([
+
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\Action::make('approve')
+                        ->label('Approve')
+                        ->icon('heroicon-s-check-circle')
+                        ->action(function (Post $record) {
+                            // Check if the post is already approved
+                            if ($record->is_approved) {
+                                // If the post is already approved, show a notification and stop the email from being sent
+                                Notification::make()
+                                    ->title('This post is already approved.')
+                                    ->warning()
+                                    ->send();
+
+                                return; // Prevent further actions, including sending the email
+                            }
+
+                            // Update the post's approval status
+                            $record->update(['is_approved' => true]);
+
+                            // Send an email to the user informing them that the post is approved
+                            Mail::to($record->user->email)->send(new PostApproved($record));
+
+                            // Show success notification
                             Notification::make()
-                                ->title('This post is already approved.')
-                                ->warning()
+                                ->title('Post approved and email sent!')
+                                ->success()
                                 ->send();
-
-                            return; // Prevent further actions, including sending the email
-                        }
-
-                        // Update the post's approval status
-                        $record->update(['is_approved' => true]);
-
-                        // Send an email to the user informing them that the post is approved
-                        Mail::to($record->user->email)->send(new PostApproved($record));
-
-                        // Show success notification
-                        Notification::make()
-                            ->title('Post approved and email sent!')
-                            ->success()
-                            ->send();
-                    })
-                    ->color('success')
+                        })
+                        ->color('success')
+                        ->visible(fn($record) => auth()->user()->hasRole('super_admin')),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
