@@ -15,26 +15,27 @@ This is a simple blog application with minimum requirements.
 
 Follow this instructions to install the project on your machine:
 
-1. Clone this repo. ```bash
+1. Clone this repo. 
+    ```bash
      git clone https://github.com/AyushMahatara/BlogPost.git
     ```
-2. `cd BlogPost`
-3. `composer install`
-4. `copy and paste .env.example`
-5. `rename the copied file '.env copy.example' to '.env'`
-6. `php artisan key:generate`
-7. Set **database config** on `.env` file `optional`
-8. `php artisan migrate --seed`
-9. `php artisan serve`
-10. Click on the link to open the `Application` 
+3. `cd BlogPost`
+4. `composer install`
+5. `copy and paste .env.example`
+6. `rename the copied file '.env copy.example' to '.env'`
+7. `php artisan key:generate`
+8. Set **database config** on `.env` file `optional`
+9. `php artisan migrate --seed`
+10. `php artisan serve`
+11. Click on the link to open the `Application` 
 #### Note: While running migration it asks for db to create as we are using sqlite just type 'yes'. There is only one Seeder file as this is a small project.
 
-11. `php artisan shiled:generate --all`
-12. `php artisan shield:super-admin`
-13. Choose which email would like to make admin 
+1.  `php artisan shiled:generate --all`
+2.  `php artisan shield:super-admin`
+3.  Choose which email would like to make admin 
 #### Note: Use ID example for `admin@example.com` type 1.
 
-14. Access the Dashboard by typing `/admin` in the url example `http://127.0.0.1:8000/admin`
+1.  Access the Dashboard by typing `/admin` in the url example `http://127.0.0.1:8000/admin`
 
 ## Credential 
 
