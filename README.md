@@ -32,7 +32,7 @@ Follow this instructions to install the project on your machine:
 
 1.  `php artisan shiled:generate --all`
 2.  `php artisan shield:super-admin`
-3.  Choose which email would like to make admin 
+3.  Choose which email would like to make Super Admin 
 #### Note: Use ID example for `admin@example.com` type 1.
 
 1.  Access the Dashboard by typing `/admin` in the url example `http://127.0.0.1:8000/admin`
@@ -43,4 +43,4 @@ Follow this instructions to install the project on your machine:
 - Email: `user@example.com` Password: `password123`
 - Email: `guest@example.com` Password: `password123`
 
-#### Note: After logging in with Super Admin email, don't forget to give Permission to the Roles.
+#### Note: After logging in with Super Admin email, don't forget to give Permission to the Roles. For Email please edit .env file as needed.
